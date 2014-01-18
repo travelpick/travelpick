@@ -199,8 +199,11 @@ rewind_posts();
 	<div class="container">
 		<form method="get" id="et-filter-map" action="<?php echo esc_url( home_url( '/' ) ); ?>">
 			<a href="#" class="filter-type listing-type"><span class="et_explorable_filter_text"><?php esc_html_e( 'All Listing Types', 'Explorable' ); ?></span><span class="et_filter_arrow"></span></a>
-			<a href="#" class="filter-type listing-location"><span class="et_explorable_filter_text"><?php esc_html_e( 'All Locations', 'Explorable' ); ?></span><span class="et_filter_arrow"></span></a>
-			<a href="#" class="filter-type listing-rating"><span class="et_explorable_filter_text"><?php esc_html_e( 'Any Rating', 'Explorable' ); ?></span><span class="et_filter_arrow"></span></a>
+			<a href="#" class="filter-type listing-cost"><span class="et_explorable_filter_text"><?php esc_html_e( 'All Listing Costs', 'Explorable' ); ?></span><span class="et_filter_arrow"></span></a>
+			<a href="#" class="filter-type listing-flight"><span class="et_explorable_filter_text"><?php esc_html_e( 'All Listing Flight Time', 'Explorable' ); ?></span><span class="et_filter_arrow"></span></a>
+			<a href="#" class="filter-type listing-popularity"><span class="et_explorable_filter_text"><?php esc_html_e( 'All Listing Popularity', 'Explorable' ); ?></span><span class="et_filter_arrow"></span></a>
+			<!--<a href="#" class="filter-type listing-location"><span class="et_explorable_filter_text"><?php //esc_html_e( 'All Locations', 'Explorable' ); ?></span><span class="et_filter_arrow"></span></a>
+			<a href="#" class="filter-type listing-rating"><span class="et_explorable_filter_text"><?php //esc_html_e( 'Any Rating', 'Explorable' ); ?></span><span class="et_filter_arrow"></span></a>  -->
 			<button id="et-filter"><?php esc_html_e( 'Filter', 'Explorable' ); ?></button>
 			<input type="hidden" value="" name="s" />
 			<input type="hidden" value="listing" name="post_type" />

@@ -350,6 +350,28 @@ function et_explorable_register_listing_posttype() {
 		'query_var' 	=> true,
 		'rewrite' 		=> apply_filters( 'et_listing_location_rewrite_args', array( 'slug' => 'location' ) ),
 	) );
+	
+	$labels = array(
+		'name' 				=> _x( 'Types of rest', 'taxonomy general name', 'Explorable' ),
+		'singular_name' 	=> _x( 'Type of rest', 'taxonomy singular name', 'Explorable' ),
+		'search_items' 		=>  __( 'Search types', 'Explorable' ),
+		'all_items' 		=> __( 'All types of rest', 'Explorable' ),
+		'parent_item' 		=> __( 'Parent Location', 'Explorable' ),
+		'parent_item_colon' => __( 'Parent Location:', 'Explorable' ),
+		'edit_item' 		=> __( 'Edit Type', 'Explorable' ),
+		'update_item' 		=> __( 'Update Type', 'Explorable' ),
+		'add_new_item' 		=> __( 'Add New Type', 'Explorable' ),
+		'new_item_name' 	=> __( 'New Type Name', 'Explorable' ),
+		'menu_name' 		=> __( 'Types of rest', 'Explorable' ),
+	);
+
+	register_taxonomy( 'listing_type_of_rest', array( 'listing' ), array(
+		'hierarchical' 	=> false,
+		'labels' 		=> $labels,
+		'show_ui' 		=> true,
+		'query_var' 	=> true,
+		'rewrite' 		=> apply_filters( 'et_listing_type_of_rest_rewrite_args', array( 'slug' => 'type_of_rest' ) ),
+	) );	
 }
 
 //add filter to ensure the text Listing is displayed when user updates a listing
