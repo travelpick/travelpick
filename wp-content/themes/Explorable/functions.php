@@ -366,11 +366,77 @@ function et_explorable_register_listing_posttype() {
 	);
 
 	register_taxonomy( 'listing_type_of_rest', array( 'listing' ), array(
-		'hierarchical' 	=> false,
+		'hierarchical' 	=> true,
 		'labels' 		=> $labels,
 		'show_ui' 		=> true,
 		'query_var' 	=> true,
 		'rewrite' 		=> apply_filters( 'et_listing_type_of_rest_rewrite_args', array( 'slug' => 'type_of_rest' ) ),
+	) );	
+	
+	$labels = array(
+		'name' 				=> _x( 'Price', 'taxonomy general name', 'Explorable' ),
+		'singular_name' 	=> _x( 'Price', 'taxonomy singular name', 'Explorable' ),
+		'search_items' 		=>  __( 'Search prices', 'Explorable' ),
+		'all_items' 		=> __( 'All Prices', 'Explorable' ),
+		'parent_item' 		=> __( 'Parent Price', 'Explorable' ),
+		'parent_item_colon' => __( 'Parent Price:', 'Explorable' ),
+		'edit_item' 		=> __( 'Edit Price', 'Explorable' ),
+		'update_item' 		=> __( 'Update Price', 'Explorable' ),
+		'add_new_item' 		=> __( 'Add New Price', 'Explorable' ),
+		'new_item_name' 	=> __( 'New Price Name', 'Explorable' ),
+		'menu_name' 		=> __( 'Prices', 'Explorable' ),
+	);	
+	
+	register_taxonomy( 'listing_price', array( 'listing' ), array(
+		'hierarchical' 	=> true,
+		'labels' 		=> $labels,
+		'show_ui' 		=> true,
+		'query_var' 	=> true,
+		'rewrite' 		=> apply_filters( 'et_listing_price_rewrite_args', array( 'slug' => 'price' ) ),
+	) );
+
+	$labels = array(
+		'name' 				=> _x( 'Flight Time', 'taxonomy general name', 'Explorable' ),
+		'singular_name' 	=> _x( 'Flight Time', 'taxonomy singular name', 'Explorable' ),
+		'search_items' 		=>  __( 'Search flight time', 'Explorable' ),
+		'all_items' 		=> __( 'All Flight Times', 'Explorable' ),
+		'parent_item' 		=> __( 'Parent Flight Time', 'Explorable' ),
+		'parent_item_colon' => __( 'Parent Flight Time:', 'Explorable' ),
+		'edit_item' 		=> __( 'Edit Flight Time', 'Explorable' ),
+		'update_item' 		=> __( 'Update Flight Time', 'Explorable' ),
+		'add_new_item' 		=> __( 'Add New Flight Time', 'Explorable' ),
+		'new_item_name' 	=> __( 'New Flight Time Name', 'Explorable' ),
+		'menu_name' 		=> __( 'Flight Times', 'Explorable' ),
+	);	
+	
+	register_taxonomy( 'listing_flight_time', array( 'listing' ), array(
+		'hierarchical' 	=> true,
+		'labels' 		=> $labels,
+		'show_ui' 		=> true,
+		'query_var' 	=> true,
+		'rewrite' 		=> apply_filters( 'et_listing_flight_time_rewrite_args', array( 'slug' => 'flight_time' ) ),
+	) );	
+	
+	$labels = array(
+		'name' 				=> _x( 'Popularity', 'taxonomy general name', 'Explorable' ),
+		'singular_name' 	=> _x( 'Popularity', 'taxonomy singular name', 'Explorable' ),
+		'search_items' 		=>  __( 'Search popularity', 'Explorable' ),
+		'all_items' 		=> __( 'All Popularities', 'Explorable' ),
+		'parent_item' 		=> __( 'Parent Popularity', 'Explorable' ),
+		'parent_item_colon' => __( 'Parent Popularity:', 'Explorable' ),
+		'edit_item' 		=> __( 'Edit Popularity', 'Explorable' ),
+		'update_item' 		=> __( 'Update Popularity', 'Explorable' ),
+		'add_new_item' 		=> __( 'Add New Popularity', 'Explorable' ),
+		'new_item_name' 	=> __( 'New Popularity Name', 'Explorable' ),
+		'menu_name' 		=> __( 'Popularity', 'Explorable' ),
+	);	
+	
+	register_taxonomy( 'listing_popularity', array( 'listing' ), array(
+		'hierarchical' 	=> true,
+		'labels' 		=> $labels,
+		'show_ui' 		=> true,
+		'query_var' 	=> true,
+		'rewrite' 		=> apply_filters( 'et_listing_popularity_rewrite_args', array( 'slug' => 'popularity' ) ),
 	) );	
 }
 
