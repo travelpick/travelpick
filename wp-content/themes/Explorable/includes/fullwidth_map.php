@@ -201,7 +201,7 @@ rewind_posts();
 		<form method="get" id="et-filter-map" action="<?php echo esc_url( home_url( '/' ) ); ?>" style="text-align:left;">
 			<?php
 			foreach( get_taxonomies( array( 'show_ui' => true, 'public' => true, 'object_type'=>array('listing') ), 'objects' ) as $taxonomy ) {
-				$etName = str_ireplace("_", "-", $taxonomy->name);
+				$etName = $taxonomy->name;//str_ireplace("_", "-", $taxonomy->name);
 				echo '<a href="#" class="filter-type '.esc_html($etName).'"><span class="et_explorable_filter_text">'.esc_html( $taxonomy->label).'</span><span class="et_filter_arrow"></span></a>';
 			}
 			?>		
@@ -212,7 +212,7 @@ rewind_posts();
 
 			<?php
 			foreach( get_taxonomies( array( 'show_ui' => true, 'public' => true, 'object_type'=>array('listing') ), 'objects' ) as $taxonomy ) {
-				$etName = str_ireplace("_", "-", $taxonomy->name);
+				$etName = $taxonomy->name;//str_ireplace("_", "-", $taxonomy->name);
 				echo '<select name="et-'.$etName.'" id="et-'.$etName.'" data-filter="et-ab-select"  data-link-name="'.esc_html($etName).'" style="display:none">';
 				echo '<option value="none">'.esc_html( $taxonomy->label).'</option>';
 				

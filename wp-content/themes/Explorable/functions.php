@@ -161,7 +161,7 @@ function et_home_posts_query( $query = false ) {
 }
 
 function et_explorable_taxonomy_query( $query = false ) {
-	if ( ! ( is_post_type_archive( 'listing' ) || is_tax( 'listing_type' ) || is_tax( 'listing_location' ) ) ) return;
+	//if ( ! ( is_post_type_archive( 'listing' ) || is_tax( 'listing_type' ) || is_tax( 'listing_location' ) ) ) return;
 
 	if ( is_admin() || ! is_a( $query, 'WP_Query' ) || ! $query->is_main_query() ) return;
 
@@ -169,7 +169,19 @@ function et_explorable_taxonomy_query( $query = false ) {
 
 	if ( is_post_type_archive( 'listing' ) ) {
 		$taxomony_query = array( 'relation' => 'AND' );
-
+		
+		foreach( get_taxonomies( array( 'show_ui' => true, 'public' => true, 'object_type'=>array('listing') ), 'objects' ) as $taxonomy ) {
+			$etName = $taxonomy->name; //str_ireplace("_", "-", $taxonomy->name);
+			if ( isset( $_GET['et-'.$etName] ) && 'none' != $_GET['et-'.$etName] )
+				$taxomony_query[] = array(
+					'taxonomy' => $etName,
+					'field' => 'id',
+					'terms' => array( intval( $_GET['et-'.$etName] ) ),
+				);
+		}		
+		
+		$query->set( 'tax_query', $taxomony_query );
+/*
 		if ( isset( $_GET['et-listing-type'] ) && 'none' != $_GET['et-listing-type'] )
 			$taxomony_query[] = array(
 				'taxonomy' => 'listing_type',
@@ -190,7 +202,7 @@ function et_explorable_taxonomy_query( $query = false ) {
 		if ( isset( $_GET['et-listing-rating'] ) && 'none' != $_GET['et-listing-rating'] ) {
 			$query->set( 'meta_key', '_et_explorable_comments_rating' );
 			$query->set( 'meta_value', intval( $_GET['et-listing-rating'] ) );
-		}
+		}*/
 	}
 }
 
