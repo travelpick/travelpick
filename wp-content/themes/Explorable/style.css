@@ -698,3 +698,8 @@ img.alignright { display:inline; float:right; margin-left:15px; }
 	-webkit-box-shadow: inset 0 1px 0 #67dc3e, 0 2px 4px rgba(0,0,0,0.3);
 	-moz-box-shadow: inset 0 1px 0 #67dc3e, 0 2px 4px rgba(0,0,0,0.3);
 	box-shadow: inset 0 1px 0 #67dc3e, 0 2px 4px rgba(0,0,0,0.3); display: inline-block; }
+
+form#et-filter-map
+{
+	width:100%;
+}

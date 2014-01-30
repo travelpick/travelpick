@@ -305,6 +305,22 @@
 		}
 
 		if ( $et_filter_form.length ) {
+			
+			$et_ab_filters = $et_filter_form.find( 'select[data-filter=et-ab-select]' );
+			$et_ab_filters.each(function(i, element){
+				var et_filter_options_html = '';
+				var $this_select = $( element );
+				var $this_ab_type = $this_select.attr("data-link-name");
+				$this_select.find('option').each(function(){
+					var $this_option = $( this );
+					et_filter_options_html += '<li data-value="' + $this_option.attr( 'value' ) + '">' + $this_option.text() + '</li>';					
+					$( 'a.'+$this_ab_type ).append( '<ul>' + et_filter_options_html + '</ul>' );			
+					if ( $this_select.find( ':selected' ).length ) {
+						$( 'a.'+$this_ab_type+' .et_explorable_filter_text' ).text( $this_select.find( ':selected' ).text() );
+					}
+				});
+			});
+			/*
 			$et_filter_listing_type = $et_filter_form.find( '#et-listing-type' );
 			$et_filter_listing_location = $et_filter_form.find( '#et-listing-location' );
 			$et_filter_listing_rating = $et_filter_form.find( '#et-listing-rating' );
@@ -345,7 +361,7 @@
 
 			if ( $et_filter_listing_rating.find( ':selected' ).length ) {
 				$( 'a.listing-rating .et_explorable_filter_text' ).html( $( 'a.listing-rating li[data-value=' + $et_filter_listing_rating.find( ':selected' ).val() + ']' ).html() );
-			}
+			}*/
 
 			$( 'a.filter-type' ).click( function() {
 				var $this_element = $(this);

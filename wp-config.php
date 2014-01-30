@@ -22,7 +22,7 @@ define('DB_NAME', 'travel2u_germes');
 define('DB_USER', 'travel2u_germes');
 
 /** Пароль к базе данных MySQL */
-define('DB_PASSWORD', 'G10N2Q8i');
+define('DB_PASSWORD', '123');
 
 /** Имя сервера MySQL */
 define('DB_HOST', 'localhost');
