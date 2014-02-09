@@ -212,7 +212,7 @@ rewind_posts();
 
 			<?php
 			foreach( get_taxonomies( array( 'show_ui' => true, 'public' => true, 'object_type'=>array('listing') ), 'objects' ) as $taxonomy ) {
-				$etName = $taxonomy->name;//str_ireplace("_", "-", $taxonomy->name);
+				$etName = $taxonomy->name;
 				echo '<select name="et-'.$etName.'" id="et-'.$etName.'" data-filter="et-ab-select"  data-link-name="'.esc_html($etName).'" style="display:none">';
 				echo '<option value="none">'.esc_html( $taxonomy->label).'</option>';
 				
@@ -261,7 +261,13 @@ rewind_posts();
 						</div> <!-- .listing-image -->
 						<div class="listing-text">
 							<h3><?php the_title(); ?></h3>
-							<p><?php echo wp_strip_all_tags( get_the_term_list( get_the_ID(), 'listing_type', '', ', ' ) ); ?></p>
+										
+							<?php foreach( get_taxonomies( array( 'show_ui' => true, 'object_type'=>array('listing') ), 'objects' ) as $taxonomy ) {
+								$etName = $taxonomy->name;
+								echo '<p>', wp_strip_all_tags( get_the_term_list( get_the_ID(), $etName, esc_html( $taxonomy->label).": ") ), '</p>';
+							}	
+							?>	
+							
 						<?php if ( ( $et_rating = et_get_rating() ) && 0 != $et_rating ) : ?>
 							<span class="et-rating"><span style="<?php printf( 'width: %dpx;', esc_attr( $et_rating * 17 ) ); ?>"></span></span>
 						<?php endif; ?>
