@@ -160,6 +160,28 @@ function et_home_posts_query( $query = false ) {
 	$query->set( 'posts_per_page', '-1' );
 }
 
+function travelpick_fields($fields) {
+    global $wpdb;
+    $fields = "tp_posts . *, count(tp_posts.ID) as count";
+    return $fields;
+}
+
+function travelpick_orderby($orderby) {
+    global $wpdb;
+    $orderby = "count DESC";
+    return $orderby;
+}
+function travelpick_join($join) {
+    global $wpdb;
+    $join = "JOIN tp_term_relationships AS tt1 ON ( tp_posts.ID = tt1.object_id )";
+    return $join;
+}
+function travelpick_where($where) {
+    global $wpdb;
+    print_r($where);
+    return $where;
+}
+
 function et_explorable_taxonomy_query( $query = false ) {
 	//if ( ! ( is_post_type_archive( 'listing' ) || is_tax( 'listing_type' ) || is_tax( 'listing_location' ) ) ) return;
 
@@ -168,7 +190,11 @@ function et_explorable_taxonomy_query( $query = false ) {
 	$query->set( 'posts_per_page', '-1' );
 
 	if ( is_post_type_archive( 'listing' ) ) {
-		$taxomony_query = array( 'relation' => 'AND' );
+		$taxomony_query = array( 'relation' => 'OR' );
+		add_filter( 'posts_orderby', 'travelpick_orderby' );
+		add_filter( 'posts_fields', 'travelpick_fields' );
+		//add_filter( 'posts_join_paged', 'travelpick_join' );
+		//add_filter( 'posts_where_paged', 'travelpick_where' );
 		
 		foreach( get_taxonomies( array( 'show_ui' => true, 'public' => true, 'object_type'=>array('listing') ), 'objects' ) as $taxonomy ) {
 			$etName = $taxonomy->name; //str_ireplace("_", "-", $taxonomy->name);
@@ -181,6 +207,8 @@ function et_explorable_taxonomy_query( $query = false ) {
 		}		
 		
 		$query->set( 'tax_query', $taxomony_query );
+		//add_filter( 'posts_groupby', 'count' );
+		//add_filter( 'posts_fields', 'count(tp_posts.ID) as count' );		
 /*
 		if ( isset( $_GET['et-listing-type'] ) && 'none' != $_GET['et-listing-type'] )
 			$taxomony_query[] = array(
