@@ -346,7 +346,7 @@ function et_explorable_register_listing_posttype() {
 	);
 
 	register_post_type( 'listing' , apply_filters( 'et_listing_posttype_args', $args ) );
-
+	
 	$labels = array(
 		'name' 				=> _x( 'Types', 'taxonomy general name', 'Explorable' ),
 		'singular_name' 	=> _x( 'Type', 'taxonomy singular name', 'Explorable' ),
@@ -390,7 +390,7 @@ function et_explorable_register_listing_posttype() {
 		'query_var' 	=> true,
 		'rewrite' 		=> apply_filters( 'et_listing_location_rewrite_args', array( 'slug' => 'location' ) ),
 	) );
-	
+	/*
 	$labels = array(
 		'name' 				=> _x( 'Types of rest', 'taxonomy general name', 'Explorable' ),
 		'singular_name' 	=> _x( 'Type of rest', 'taxonomy singular name', 'Explorable' ),
@@ -477,7 +477,7 @@ function et_explorable_register_listing_posttype() {
 		'show_ui' 		=> true,
 		'query_var' 	=> true,
 		'rewrite' 		=> apply_filters( 'et_listing_popularity_rewrite_args', array( 'slug' => 'popularity' ) ),
-	) );	
+	) );	*/
 }
 
 //add filter to ensure the text Listing is displayed when user updates a listing

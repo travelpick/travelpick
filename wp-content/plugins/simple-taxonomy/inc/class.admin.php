@@ -494,6 +494,48 @@ class SimpleTaxonomy_Admin {
 								</div>
 							</div>
 						</div>
+
+						<div class="meta-box-sortabless">
+							<div class="postbox">
+								<h3 class="hndle"><span><?php _e('Required in query?', 'simple-taxonomy'); ?></span></h3>
+								
+								<div class="inside">
+									<table class="form-table" style="clear:none;">
+										<tr valign="top">
+											<th scope="row"><label for="required"><?php _e('Required in query?', 'simple-taxonomy'); ?></label></th>
+											<td>
+												<select name="required" id="required" style="width:20%">
+													<?php
+													foreach( self::getTrueFalse() as $type_key => $type_name ) {
+														echo '<option '.selected($taxonomy['required'], $type_key, false).' value="'.esc_attr($type_key).'">'.esc_html($type_name).'</option>' . "\n";
+													}
+													?>
+												</select>
+												<span class="description"><?php _e("Indicate whether the taxonomy is required in query (OR, NOT relation).", 'simple-taxonomy'); ?></span>
+											</td>
+										</tr>
+									</table>
+								</div>
+							</div>
+						</div>
+						
+						<div class="meta-box-sortabless">
+							<div class="postbox">
+								<h3 class="hndle"><span><?php _e('Taxonomy weight', 'simple-taxonomy'); ?></span></h3>
+								
+								<div class="inside">
+									<table class="form-table" style="clear:none;">
+										<tr valign="top">
+											<th scope="row"><label for="weight"><?php _e('Taxonomy weight', 'simple-taxonomy'); ?></label></th>
+											<td>
+												<input name="weight" type="text" id="labels-weight" value="<?php echo esc_attr($taxonomy['weight']); ?>" class="regular-text" />
+												<span class="description"><?php _e("Taxonomy weight in search results.", 'simple-taxonomy'); ?></span>
+											</td>
+										</tr>
+									</table>
+								</div>
+							</div>
+						</div>						
 						
 						<div class="meta-box-sortabless">
 							<div class="postbox">
@@ -997,7 +1039,9 @@ class SimpleTaxonomy_Admin {
 			// Specific to plugin
 			'objects'		=> array(),
 			'metabox' 		=> 'default',
-			'auto' 			=> 'none'
+			'auto' 			=> 'none',
+			'required'		=> 0,
+			'weight'		=> 0
 		);
 	}
 
@@ -1020,7 +1064,9 @@ class SimpleTaxonomy_Admin {
 			'new_item_name' 				=> __( 'New Term Name', 'simple-taxonomy' ),
 			'separate_items_with_commas' 	=> __( 'Separate terms with commas', 'simple-taxonomy' ),
 			'add_or_remove_items' 			=> __( 'Add or remove terms', 'simple-taxonomy' ),
-			'choose_from_most_used' 		=> __( 'Choose from the most used terms', 'simple-taxonomy' )
+			'choose_from_most_used' 		=> __( 'Choose from the most used terms', 'simple-taxonomy' ),
+			'required'						=> __( 'Required in query?', 'simple-taxonomy' ),
+			'weight'						=> __( 'Taxonomy weight', 'simple-taxonomy' ),
 		);
 	}
 
