@@ -39,8 +39,10 @@ if ( ! function_exists( 'et_setup_theme' ) ){
 		add_action( 'wp_head', 'et_add_viewport_meta' );
 
 		add_action( 'pre_get_posts', 'et_home_posts_query' );
-
-		add_action( 'pre_get_posts', 'et_explorable_taxonomy_query' );
+	
+		add_action( 'pre_get_posts', 'et_travelpick_explorable_taxonomy_query' );
+		
+		//add_action( 'pre_get_posts', 'et_explorable_taxonomy_query' );
 
 		add_filter( 'wp_page_menu_args', 'et_add_home_link' );
 
@@ -160,26 +162,202 @@ function et_home_posts_query( $query = false ) {
 	$query->set( 'posts_per_page', '-1' );
 }
 
-function travelpick_fields($fields) {
+function travelpick_fields($fields, $taxOpt) {
     global $wpdb;
-    $fields = "tp_posts . *, count(tp_posts.ID) as count";
+    
+    $fields = array();
+    $fields = "tp_posts.*,";
+    
+    $caseField = "(CASE tt1.term_taxonomy_id ";
+    foreach($taxOpt as $name=>$opt)
+    {
+    	if (isset( $_GET['et-'.$name] ) && 'none' != $_GET['et-'.$name] )
+    	{
+    		$val = $_GET['et-'.$name];
+    		$caseField.="WHEN ".$val." THEN ".$opt['weight']." ";		
+    	}	
+    }    
+    $caseField.="ELSE 0 END) as weight";
+	$fields.=$caseField;
+    //$fields = "tp_posts . *, count(tp_posts.ID) as count";
     return $fields;
+}
+function travelpick_fields_simple($fields) {
+    global $wpdb;
+    return "tp_posts.*, temp.weight, count(tp_posts.ID) as count";
 }
 
 function travelpick_orderby($orderby) {
     global $wpdb;
-    $orderby = "count DESC";
+    $orderby = "weight DESC";
     return $orderby;
 }
-function travelpick_join($join) {
+function travelpick_groupby_simple($groupby) {
     global $wpdb;
-    $join = "JOIN tp_term_relationships AS tt1 ON ( tp_posts.ID = tt1.object_id )";
+    $groupby = "tp_posts.ID";
+    return $groupby;
+}
+
+function travelpick_orderby_simple($orderby) {
+    global $wpdb;
+    $orderby = "temp.weight DESC, count DESC";
+    return $orderby;
+}
+
+function travelpick_join_simple($join, $taxOpt) {
+    global $wpdb;
+    
+    $where = travelpick_where("", $taxOpt);
+    $join = "JOIN tp_term_relationships AS tt1 ON ( tp_posts.ID = tt1.object_id ) ";
+    
+    $index=2;
+    foreach($taxOpt as $name=>$opt)
+    {
+    	if ($opt['required'] && isset( $_GET['et-'.$name] ) && 'none' != $_GET['et-'.$name] )
+    	{
+    		$join.= "JOIN tp_term_relationships AS tt".$index." ON ( tp_posts.ID = tt".$index.".object_id ) ";
+    		$index++;   		
+    	}	
+    }
+   
     return $join;
 }
-function travelpick_where($where) {
+
+function travelpick_join($join, $taxOpt) {
     global $wpdb;
-    print_r($where);
+    
+    $where = travelpick_where("", $taxOpt);
+    $fields = travelpick_fields("", $taxOpt);
+    
+    $join = "JOIN tp_term_relationships AS tt1 ON ( tp_posts.ID = tt1.object_id ) ";
+    
+    $index=2;
+    foreach($taxOpt as $name=>$opt)
+    {
+    	if ($opt['required'] && isset( $_GET['et-'.$name] ) && 'none' != $_GET['et-'.$name] )
+    	{
+    		$join.= "JOIN tp_term_relationships AS tt".$index." ON ( tp_posts.ID = tt".$index.".object_id ) ";
+    		$index++;   		
+    	}	
+    }
+    
+    $joined = "JOIN (SELECT $fields
+    			     FROM tp_posts $join
+    			     WHERE 1=1 $where
+    			     ORDER BY weight DESC) as temp ON temp.ID = tp_posts.ID ";
+   
+    return $joined;
+}
+function travelpick_where($where, $taxOpt) {
+    global $wpdb;
+
+    $relationOR = array();
+    $relationAND = array();
+	foreach( get_taxonomies( array( 'show_ui' => true, 'public' => true, 'object_type'=>array('listing') ), 'objects' ) as $taxonomy ) 
+	{
+		$etName = $taxonomy->name;
+		if ( isset( $_GET['et-'.$etName] ) && 'none' != $_GET['et-'.$etName] )
+		{
+			if (!$taxOpt[$etName]['required'])
+			{
+				$relationOR[] = "tt1.term_taxonomy_id=".intval( $_GET['et-'.$etName] );
+			}
+			else
+			{
+				$index = count($relationAND)+2;
+				$relationAND[] = "tt".$index.".term_taxonomy_id=".intval( $_GET['et-'.$etName] );				
+			}			
+		}
+	}    
+    $where = "";
+	if ($relationOR)
+	{
+		$relationORString = join(" OR ", $relationOR);
+		$where = " AND (".$relationORString.")";
+	}	
+		
+	if ($relationAND)
+	{	
+		$relationANDString = join(" AND ", $relationAND);
+		$where .= " AND ".$relationANDString;
+	}
+	
+	$where .= " AND tp_posts.post_type = 'listing' AND (tp_posts.post_status = 'publish')";
+	
     return $where;
+}
+function travelpick_where_simple($where) {
+	return "";
+}
+function et_travelpick_explorable_taxonomy_query( $query = false ) {
+	if ( is_admin() || ! is_a( $query, 'WP_Query' ) || ! $query->is_main_query() ) return;
+
+	$query->set( 'posts_per_page', '-1' );
+
+	if ( is_post_type_archive( 'listing' ) ) {
+		
+	    $options = get_option( STAXO_OPTION );
+	    
+	    $taxOpt = array();
+	    foreach( (array) $options['taxonomies'] as $taxonomy )
+	    {
+	    	$taxOpt[$taxonomy['name']] = array(
+	    		'weight'=>$taxonomy['weight'],
+	    		'required'=>$taxonomy['required'],
+	    	);
+	    }
+	    
+		add_filter( 'posts_orderby', 'travelpick_orderby_simple' );
+		add_filter( 'posts_fields', 'travelpick_fields_simple' );
+		add_filter( 'posts_groupby', 'travelpick_groupby_simple' );
+		
+		$joinFunc = function( $join ) use ( $taxOpt )
+	    {
+	        return travelpick_join( $join, $taxOpt );
+	    };		
+		add_filter( 'posts_join_paged', $joinFunc, 2 );
+		
+		add_filter( 'posts_where_paged', 'travelpick_where_simple' );
+	}	
+}
+function et_travelpick_explorable_taxonomy_query_old( $query = false ) {
+	if ( is_admin() || ! is_a( $query, 'WP_Query' ) || ! $query->is_main_query() ) return;
+
+	$query->set( 'posts_per_page', '-1' );
+
+	if ( is_post_type_archive( 'listing' ) ) {
+		
+	    $options = get_option( STAXO_OPTION );
+	    
+	    $taxOpt = array();
+	    foreach( (array) $options['taxonomies'] as $taxonomy )
+	    {
+	    	$taxOpt[$taxonomy['name']] = array(
+	    		'weight'=>$taxonomy['weight'],
+	    		'required'=>$taxonomy['required'],
+	    	);
+	    }
+	    
+		add_filter( 'posts_orderby', 'travelpick_orderby' );
+		
+		$fieldFunc = function( $fields ) use ( $taxOpt )
+	    {
+	        return travelpick_fields( $fields, $taxOpt );
+	    };			
+		add_filter( 'posts_fields', $fieldFunc, 2 );
+		
+		$joinFunc = function( $join ) use ( $taxOpt )
+	    {
+	        return travelpick_join( $join, $taxOpt );
+	    };		
+		add_filter( 'posts_join_paged', $joinFunc, 2 );
+		
+		$whereFunc = function( $where ) use ( $taxOpt )
+	    {
+	        return travelpick_where( $where, $taxOpt );
+	    };
+		add_filter( 'posts_where_paged', $whereFunc, 2 );
+	}	
 }
 
 function et_explorable_taxonomy_query( $query = false ) {
