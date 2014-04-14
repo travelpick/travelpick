@@ -434,7 +434,7 @@ function post_categories_meta_box( $post, $box ) {
 		<?php if (!$taxOpt[$taxonomy]['required']):?>
 		<div id="term_order">
 			<label for="weight"><?php _e( 'Weight' ); ?></label>
-			<?php $terms = get_terms($taxonomy);?>
+			<?php $terms = get_terms($taxonomy, array('get'=>'all'));?>
             <ul id="weight-list">
             <?php
             
