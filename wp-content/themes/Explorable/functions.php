@@ -187,9 +187,14 @@ function travelpick_fields_simple($fields) {
     return "tp_posts.*, temp.weight, temp.term_order, count(tp_posts.ID) as count";
 }
 
+function travelpick_fields_hard($fields) {
+    global $wpdb;
+    return "tp_posts.*, SUM(tt1.term_order) as sum";
+}
+
 function travelpick_orderby($orderby) {
     global $wpdb;
-    $orderby = "weight DESC";
+    $orderby = "sum DESC";
     return $orderby;
 }
 function travelpick_groupby_simple($groupby) {
@@ -289,7 +294,7 @@ function travelpick_where($where, $taxOpt) {
 function travelpick_where_simple($where) {
 	return "";
 }
-function et_travelpick_explorable_taxonomy_query( $query = false ) {
+function et_travelpick_explorable_taxonomy_query_old( $query = false ) {
 	if ( is_admin() || ! is_a( $query, 'WP_Query' ) || ! $query->is_main_query() ) return;
 
 	$query->set( 'posts_per_page', '-1' );
@@ -320,7 +325,7 @@ function et_travelpick_explorable_taxonomy_query( $query = false ) {
 		add_filter( 'posts_where_paged', 'travelpick_where_simple' );
 	}	
 }
-function et_travelpick_explorable_taxonomy_query_old( $query = false ) {
+function et_travelpick_explorable_taxonomy_query( $query = false ) {
 	if ( is_admin() || ! is_a( $query, 'WP_Query' ) || ! $query->is_main_query() ) return;
 
 	$query->set( 'posts_per_page', '-1' );
@@ -339,16 +344,16 @@ function et_travelpick_explorable_taxonomy_query_old( $query = false ) {
 	    }
 	    
 		add_filter( 'posts_orderby', 'travelpick_orderby' );
-		
-		$fieldFunc = function( $fields ) use ( $taxOpt )
+		add_filter( 'posts_groupby', 'travelpick_groupby_simple' );
+		/*$fieldFunc = function( $fields ) use ( $taxOpt )
 	    {
-	        return travelpick_fields( $fields, $taxOpt );
-	    };			
-		add_filter( 'posts_fields', $fieldFunc, 2 );
+	        return travelpick_fields_hard( $fields, $taxOpt );
+	    };*/
+		add_filter( 'posts_fields', 'travelpick_fields_hard' );
 		
 		$joinFunc = function( $join ) use ( $taxOpt )
 	    {
-	        return travelpick_join( $join, $taxOpt );
+	        return travelpick_join_simple( $join, $taxOpt );
 	    };		
 		add_filter( 'posts_join_paged', $joinFunc, 2 );
 		
