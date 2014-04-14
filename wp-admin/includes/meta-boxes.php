@@ -421,6 +421,33 @@ function post_categories_meta_box( $post, $box ) {
 				<?php wp_terms_checklist($post->ID, array( 'taxonomy' => $taxonomy, 'popular_cats' => $popular_ids ) ) ?>
 			</ul>
 		</div>
+		<?php 
+			$taxOptions = get_option( STAXO_OPTION );
+		    $taxOpt = array();
+		    foreach( (array) $taxOptions['taxonomies'] as $taxo )
+		    {
+		    	$taxOpt[$taxo['name']] = array(
+		    		'required'=>isset($taxo['required']) ? $taxo['required'] : 1,
+		    	);
+		    }			
+		?>
+		<?php if (!$taxOpt[$taxonomy]['required']):?>
+		<div id="term_order">
+			<label for="weight"><?php _e( 'Weight' ); ?></label>
+			<?php $terms = get_terms($taxonomy);?>
+            <ul id="weight-list">
+            <?php
+            
+            foreach($terms as $term)
+            {
+            	$rship = wp_get_term_relationship($post->ID, $term->term_id );         	
+            	$name = 'tax_input_weight[' . $taxonomy . ']['.$term->term_id.']';
+            	echo "<li>".$term->name."<input type='text' name='{$name}' value='".($rship->term_order ? $rship->term_order : 0)."' /></li>";
+            }	
+            ?>	
+            </ul>		
+		</div>	
+		<?php endif; ?>		
 	<?php if ( current_user_can($tax->cap->edit_terms) ) : ?>
 			<div id="<?php echo $taxonomy; ?>-adder" class="wp-hidden-children">
 				<h4>
@@ -443,7 +470,7 @@ function post_categories_meta_box( $post, $box ) {
 					<span id="<?php echo $taxonomy; ?>-ajax-response"></span>
 				</p>
 			</div>
-		<?php endif; ?>
+		<?php endif; ?>	
 	</div>
 	<?php
 }

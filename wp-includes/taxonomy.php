@@ -3142,6 +3142,19 @@ function _update_generic_term_count( $terms, $taxonomy ) {
 	}
 }
 
+function wp_update_term_order($post_ID, $term_taxonomy_id, $weight)
+{
+	global $wpdb;
+	$wpdb->update($wpdb->term_relationships, array('term_order'=>$weight), array('term_taxonomy_id' => $term_taxonomy_id, 'object_id'=>$post_ID) );
+}
+
+function wp_get_term_relationship($post_ID, $term_taxonomy_id)
+{
+	global $wpdb;
+	$result = $wpdb->get_row("SELECT object_id, term_taxonomy_id, term_order FROM $wpdb->term_relationships WHERE term_taxonomy_id=$term_taxonomy_id AND object_id=$post_ID");
+	return $result;
+}
+
 /**
  * Generates a permalink for a taxonomy term archive.
  *

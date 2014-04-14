@@ -337,7 +337,7 @@ function bulk_edit_posts( $post_data = null ) {
 	$reset = array(
 		'post_author', 'post_status', 'post_password',
 		'post_parent', 'page_template', 'comment_status',
-		'ping_status', 'keep_private', 'tax_input',
+		'ping_status', 'keep_private', 'tax_input', 'tax_input_weight',
 		'post_category', 'sticky', 'post_format',
 	);
 

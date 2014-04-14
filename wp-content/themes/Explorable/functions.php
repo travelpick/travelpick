@@ -166,7 +166,7 @@ function travelpick_fields($fields, $taxOpt) {
     global $wpdb;
     
     $fields = array();
-    $fields = "tp_posts.*,";
+    $fields = "tp_posts.*, tt1.term_order, ";
     
     $caseField = "(CASE tt1.term_taxonomy_id ";
     foreach($taxOpt as $name=>$opt)
@@ -179,12 +179,12 @@ function travelpick_fields($fields, $taxOpt) {
     }    
     $caseField.="ELSE 0 END) as weight";
 	$fields.=$caseField;
-    //$fields = "tp_posts . *, count(tp_posts.ID) as count";
+
     return $fields;
 }
 function travelpick_fields_simple($fields) {
     global $wpdb;
-    return "tp_posts.*, temp.weight, count(tp_posts.ID) as count";
+    return "tp_posts.*, temp.weight, temp.term_order, count(tp_posts.ID) as count";
 }
 
 function travelpick_orderby($orderby) {
@@ -200,7 +200,7 @@ function travelpick_groupby_simple($groupby) {
 
 function travelpick_orderby_simple($orderby) {
     global $wpdb;
-    $orderby = "temp.weight DESC, count DESC";
+    $orderby = "temp.weight DESC, temp.term_order DESC, count DESC";
     return $orderby;
 }
 
@@ -244,7 +244,7 @@ function travelpick_join($join, $taxOpt) {
     $joined = "JOIN (SELECT $fields
     			     FROM tp_posts $join
     			     WHERE 1=1 $where
-    			     ORDER BY weight DESC) as temp ON temp.ID = tp_posts.ID ";
+    			     ORDER BY weight DESC, tt1.term_order DESC) as temp ON temp.ID = tp_posts.ID ";
    
     return $joined;
 }

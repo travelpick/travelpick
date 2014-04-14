@@ -2924,8 +2924,19 @@ function wp_insert_post( $postarr, $wp_error = false ) {
 				$tags = array_filter($tags);
 			if ( current_user_can($taxonomy_obj->cap->assign_terms) )
 				wp_set_post_terms( $post_ID, $tags, $taxonomy );
-		}
-	}
+
+			if (isset($tax_input_weight[$taxonomy]))
+			{
+				if ( !is_array($tags) )	
+					$tags = array($tags);
+	
+				foreach($tags as $tag)
+				{
+					wp_update_term_order($post_ID, $tag, $tax_input_weight[$taxonomy][$tag]);
+				}				
+			}		
+		}			
+	}	
 
 	$current_guid = get_post_field( 'guid', $post_ID );
 
@@ -4107,7 +4118,18 @@ function wp_insert_attachment($object, $file = false, $parent = 0) {
 			if ( current_user_can($taxonomy_obj->cap->assign_terms) )
 				wp_set_post_terms( $post_ID, $tags, $taxonomy );
 		}
-	}
+		
+		if (isset($tax_input_weight[$taxonomy]))
+		{
+			if ( !is_array($tags) )	
+				$tags = array($tags);
+
+			foreach($tags as $tag)
+			{
+				wp_update_term_order($post_ID, $tag, $tax_input_weight[$taxonomy][$tag]);
+			}				
+		}		
+	}	
 
 	if ( $file )
 		update_attached_file( $post_ID, $file );
