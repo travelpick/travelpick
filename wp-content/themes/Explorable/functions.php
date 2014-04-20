@@ -265,7 +265,11 @@ function travelpick_where($where, $taxOpt) {
 		{
 			if (!$taxOpt[$etName]['required'])
 			{
-				$relationOR[] = "tt1.term_taxonomy_id=".intval( $_GET['et-'.$etName] );
+				foreach($_GET['et-'.$etName] as $etVal)
+				{
+					$relationOR[] = "tt1.term_taxonomy_id=".intval( $etVal );					
+				}				
+				//$relationOR[] = "tt1.term_taxonomy_id=".intval( $_GET['et-'.$etName] );
 			}
 			else
 			{

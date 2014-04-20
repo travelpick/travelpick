@@ -388,17 +388,49 @@
 					$parent_link = $this_element.closest('a'),
 					$active_filter_option,
 					filter_order;
-
-				$parent_link.find( '.et_explorable_filter_text' ).html( $this_element.html() );
+				
 				filter_order = $parent_link.index('.filter-type');
 				$active_filter_option = $et_filter_form.find( 'select' ).eq( filter_order );
 
-				$active_filter_option.find( ':selected' ).removeAttr( 'selected' );
-				$active_filter_option.find( 'option[value=' + $this_element.attr( 'data-value' ) + ']' ).attr("selected", "selected");
+				if ($active_filter_option.attr("data-required")=="1")
+				{
+					$parent_link.find( '.et_explorable_filter_text' ).html( $this_element.html() );							
+					$active_filter_option.find( ':selected' ).removeAttr( 'selected' );
+					$this_element.closest("ul").find( '.selected' ).removeClass( 'selected' );
+				}
+				else
+				{
+					$default_text = $this_element.closest("ul").find("li[data-value=none]").html();
+					$filter = $parent_link.find( '.et_explorable_filter_text' );
+					$count = $active_filter_option.find( ':selected' ).length;
 
-				$parent_link.removeClass( 'filter-type-open' ).find( 'ul' ).animate( { 'opacity' : 0 }, 500, function() {
+					if ($count)
+					{
+						$filter.html( $default_text + ' ('+$count+') ' );
+					}	
+					else
+					{
+						$filter.html( $default_text );
+					}			
+				}	
+				
+				if ($this_element.attr("data-value") != "none")
+				{
+					$selectedOpt = $active_filter_option.find( 'option[value=' + $this_element.attr( 'data-value' ) + ']' );
+					if ($selectedOpt.attr("selected"))
+					{
+						$selectedOpt.removeAttr( 'selected' );
+					}
+					else
+					{
+						$selectedOpt.attr("selected", "selected");
+					}
+					$this_element.toggleClass("selected");						
+				}
+				
+				/*$parent_link.removeClass( 'filter-type-open' ).find( 'ul' ).animate( { 'opacity' : 0 }, 500, function() {
 					$(this).css( 'display', 'none' );
-				} );
+				} );*/
 
 				return false;
 			} );

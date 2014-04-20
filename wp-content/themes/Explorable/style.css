@@ -703,3 +703,7 @@ form#et-filter-map
 {
 	width:100%;
 }
+.selected
+{
+	background-color:silver;
+}	

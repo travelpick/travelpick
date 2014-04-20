@@ -211,9 +211,25 @@ rewind_posts();
 			<input type="hidden" value="listing" name="post_type" />
 
 			<?php
+			$taxOptions = get_option( STAXO_OPTION );
+		    $taxOpt = array();
+		    foreach( (array) $taxOptions['taxonomies'] as $taxo )
+		    {
+		    	$taxOpt[$taxo['name']] = array(
+		    		'required'=>isset($taxo['required']) ? $taxo['required'] : 1,
+		    	);
+		    }			
 			foreach( get_taxonomies( array( 'show_ui' => true, 'public' => true, 'object_type'=>array('listing') ), 'objects' ) as $taxonomy ) {
+				
 				$etName = $taxonomy->name;
-				echo '<select name="et-'.$etName.'" id="et-'.$etName.'" data-filter="et-ab-select"  data-link-name="'.esc_html($etName).'" style="display:none">';
+				$required = 0;
+				if ($taxOpt[$etName]['required'])
+				{
+					$required=1;
+				}
+				
+				
+				echo '<select name="et-'.$etName.'[]" id="et-'.$etName.'" data-filter="et-ab-select" data-required='.$required.'  data-link-name="'.esc_html($etName).'" style="display:none">';
 				echo '<option value="none">'.esc_html( $taxonomy->label).'</option>';
 				
 				$items_args = array( 'hide_empty' => 1 );
