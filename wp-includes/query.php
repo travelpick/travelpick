@@ -2908,7 +2908,7 @@ class WP_Query {
 
 			return $this->posts;
 		}
-		print_r($this->request);
+		//print_r($this->request);
 		if ( 'id=>parent' == $q['fields'] ) {
 			$this->posts = $wpdb->get_results( $this->request );
 			$this->post_count = count( $this->posts );
