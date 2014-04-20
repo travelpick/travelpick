@@ -267,14 +267,18 @@ function travelpick_where($where, $taxOpt) {
 			{
 				foreach($_GET['et-'.$etName] as $etVal)
 				{
-					$relationOR[] = "tt1.term_taxonomy_id=".intval( $etVal );					
+					$tr = get_term(intval( $etVal ), $etName);
+					$term_taxonomy_id = $tr->term_taxonomy_id;					
+					$relationOR[] = "tt1.term_taxonomy_id=".$term_taxonomy_id;					
 				}				
 				//$relationOR[] = "tt1.term_taxonomy_id=".intval( $_GET['et-'.$etName] );
 			}
 			else
 			{
+				$tr = get_term(intval( $_GET['et-'.$etName] ), $etName);
+				$term_taxonomy_id = $tr->term_taxonomy_id;					
 				$index = count($relationAND)+2;
-				$relationAND[] = "tt".$index.".term_taxonomy_id=".intval( $_GET['et-'.$etName] );				
+				$relationAND[] = "tt".$index.".term_taxonomy_id=".$term_taxonomy_id;				
 			}			
 		}
 	}    
