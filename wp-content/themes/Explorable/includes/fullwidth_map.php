@@ -307,7 +307,7 @@ rewind_posts();
 										
 							<?php foreach( get_taxonomies( array( 'show_ui' => true, 'object_type'=>array('listing') ), 'objects' ) as $taxonomy ) {
 								$etName = $taxonomy->name;
-								echo '<p>', wp_strip_all_tags( get_the_term_list( get_the_ID(), $etName, esc_html( $taxonomy->label).": ", ",") ), '</p>';
+								echo '<p>', wp_strip_all_tags( get_the_term_list( get_the_ID(), $etName, esc_html( $taxonomy->label).": ", ", ") ), '</p>';
 							}	
 							?>	
 							
