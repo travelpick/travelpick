@@ -2932,8 +2932,10 @@ function wp_insert_post( $postarr, $wp_error = false ) {
 	
 				foreach($tags as $tag)
 				{
-					echo $post_ID, " ", $tag, " ", $tax_input_weight[$taxonomy][$tag], "<br/>";
-					wp_update_term_order($post_ID, $tag, $tax_input_weight[$taxonomy][$tag]);
+					$tr = get_term($tag, $taxonomy);
+					$ttid = $tr->term_taxonomy_id;
+					echo $post_ID, " ", $ttid, " ", $tax_input_weight[$taxonomy][$ttid], "<br/>";
+					wp_update_term_order($post_ID, $ttid, $tax_input_weight[$taxonomy][$ttid]);
 				}				
 			}		
 		}			

@@ -3144,7 +3144,7 @@ function _update_generic_term_count( $terms, $taxonomy ) {
 
 function wp_update_term_order($post_ID, $term_taxonomy_id, $weight)
 {
-	global $wpdb;
+	global $wpdb;	
 	$wpdb->update($wpdb->term_relationships, array('term_order'=>$weight), array('term_taxonomy_id' => $term_taxonomy_id, 'object_id'=>$post_ID) );
 }
 
