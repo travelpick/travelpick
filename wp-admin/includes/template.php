@@ -223,7 +223,16 @@ function wp_popular_terms_checklist( $taxonomy, $default = 0, $number = 10, $ech
 	$terms = get_terms( $taxonomy, array( 'orderby' => 'count', 'order' => 'DESC', 'number' => $number, 'hierarchical' => false ) );
 
 	$tax = get_taxonomy($taxonomy);
-
+	
+	$taxOptions = get_option( STAXO_OPTION );
+    $taxOpt = array();
+    foreach( (array) $taxOptions['taxonomies'] as $taxo )
+    {
+    	$taxOpt[$taxo['name']] = array(
+    		'required'=>isset($taxo['required']) ? $taxo['required'] : 1,
+    	);
+    }			
+	
 	$popular_ids = array();
 	foreach ( (array) $terms as $term ) {
 		$popular_ids[] = $term->term_id;
@@ -232,13 +241,20 @@ function wp_popular_terms_checklist( $taxonomy, $default = 0, $number = 10, $ech
 		$id = "popular-$taxonomy-$term->term_id";
 		$checked = in_array( $term->term_id, $checked_terms ) ? 'checked="checked"' : '';
 		?>
-
+		
 		<li id="<?php echo $id; ?>" class="popular-category">
 			<label class="selectit">
 			<input id="in-<?php echo $id; ?>" type="checkbox" <?php echo $checked; ?> value="<?php echo (int) $term->term_id; ?>" <?php disabled( ! current_user_can( $tax->cap->assign_terms ) ); ?> />
 				<?php echo esc_html( apply_filters( 'the_category', $term->name ) ); ?>
 			</label>
-		</li>
+			
+			<?php if (!$taxOpt[$taxonomy]['required']):?>
+            $rship = wp_get_term_relationship($post->ID, $term->term_id );         	
+            $name = 'tax_input_weight[' . $taxonomy . ']['.$term->term_taxonomy_id.']';
+            <?php echo "<input type='text' name='{$name}' value='".($rship->term_order ? $rship->term_order : 0)."' style='width:50px' />";?>		
+			<?php endif; ?>	
+			
+		</li>	
 
 		<?php
 	}
