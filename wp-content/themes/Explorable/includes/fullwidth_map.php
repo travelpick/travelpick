@@ -229,7 +229,15 @@ rewind_posts();
 				}
 				
 				
-				echo '<select name="et-'.$etName.'[]" id="et-'.$etName.'" data-filter="et-ab-select" data-required='.$required.'  data-link-name="'.esc_html($etName).'" style="display:none">';
+				if (!$required)
+				{
+					echo '<select multiple name="et-'.$etName.'[]" id="et-'.$etName.'" data-filter="et-ab-select" data-required='.$required.'  data-link-name="'.esc_html($etName).'" style="display:none">';					
+				}
+				else 
+				{
+					echo '<select name="et-'.$etName.'" id="et-'.$etName.'" data-filter="et-ab-select" data-required='.$required.'  data-link-name="'.esc_html($etName).'" style="display:none">';					
+				}
+
 				echo '<option value="none">'.esc_html( $taxonomy->label).'</option>';
 				
 				$items_args = array( 'hide_empty' => 1 );

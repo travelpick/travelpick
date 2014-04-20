@@ -422,16 +422,16 @@ function post_categories_meta_box( $post, $box ) {
 			</ul>
 		</div>
 		<?php 
-			$taxOptions = get_option( STAXO_OPTION );
+			/*$taxOptions = get_option( STAXO_OPTION );
 		    $taxOpt = array();
 		    foreach( (array) $taxOptions['taxonomies'] as $taxo )
 		    {
 		    	$taxOpt[$taxo['name']] = array(
 		    		'required'=>isset($taxo['required']) ? $taxo['required'] : 1,
 		    	);
-		    }			
+		    }	*/		
 		?>
-		<?php if (!$taxOpt[$taxonomy]['required']):?>
+		<?php if (false)://if (!$taxOpt[$taxonomy]['required']):?>
 		<div id="term_order">
 			<label for="weight"><?php _e( 'Weight' ); ?></label>
 			<?php $terms = get_terms($taxonomy, array('get'=>'all'));?>
