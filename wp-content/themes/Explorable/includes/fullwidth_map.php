@@ -295,13 +295,15 @@ rewind_posts();
 					$titletext = get_the_title();
 					$thumbnail = get_thumbnail( $width, $height, $classtext, $titletext, $titletext, false, 'ListingIndex' );
 					$thumb = $thumbnail["thumb"];
+					
+					$url = get_post_meta( get_the_ID(), "URL");
 ?>
 					<li class="<?php if ( 1 == $i ) echo esc_attr( 'et-active-listing ' ); ?>clearfix">
 						<div class="listing-image">
 							<?php print_thumbnail( $thumb, $thumbnail["use_timthumb"], $titletext, $width, $height, $classtext ); ?>
 						</div> <!-- .listing-image -->
 						<div class="listing-text">
-							<h3><?php the_title(); ?></h3>
+							<h3><a href="<?php echo reset($url)?>"><?php the_title(); ?></a></h3>
 										
 							<?php foreach( get_taxonomies( array( 'show_ui' => true, 'object_type'=>array('listing') ), 'objects' ) as $taxonomy ) {
 								$etName = $taxonomy->name;
