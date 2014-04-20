@@ -6,6 +6,15 @@
 
 		et_active_marker = null;
 
+		<?php 
+				if (isset($_GET['post_type']) && ($_GET['post_type']=='listing'))
+				{
+					?>
+					jQuery('#et-list-view.et-normal-listings').find('.et-date').click();
+					<?php 
+				}
+		?>		
+
 		$et_main_map.gmap3({
 			map:{
 				options:{
@@ -260,7 +269,15 @@ rewind_posts();
 	</div> <!-- .container -->
 </div> <!-- #filter-bar -->
 
-<div id="et-list-view" class="et-normal-listings">
+<?php 
+	$classs = "";
+	if (isset($_GET['post_type']) && ($_GET['post_type']=='listing'))
+	{
+		$classs = 'et-listview-open';
+	}
+?>
+
+<div id="et-list-view" class="et-normal-listings <?php echo $classs;?>">
 	<h2 id="listing-results"><?php esc_html_e( 'Listing Results', 'Explorable' ); ?></h2>
 
 	<div id="et-listings">
@@ -307,3 +324,17 @@ rewind_posts();
 		</div> <!-- .viewport -->
 	</div> <!-- #et-listings -->
 </div> <!-- #et-list-view -->
+
+<script type="text/javascript">
+
+
+		<?php 
+				if (isset($_GET['post_type']) && ($_GET['post_type']=='listing'))
+				{
+					?>
+					jQuery('#et-list-view.et-normal-listings').find('.et-date').click();
+					<?php 
+				}
+		?>
+		
+</script>		
