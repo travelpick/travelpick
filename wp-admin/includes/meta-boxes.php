@@ -441,7 +441,7 @@ function post_categories_meta_box( $post, $box ) {
             foreach($terms as $term)
             {
             	$rship = wp_get_term_relationship($post->ID, $term->term_id );         	
-            	$name = 'tax_input_weight[' . $taxonomy . ']['.$term->term_taxanomy_id.']';
+            	$name = 'tax_input_weight[' . $taxonomy . ']['.$term->term_taxonomy_id.']';
             	echo "<li><input type='text' name='{$name}' value='".($rship->term_order ? $rship->term_order : 0)."' style='width:50px' /> ".$term->name."</li>";
             }	
             ?>	
