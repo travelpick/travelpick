@@ -440,7 +440,7 @@
 								retText[t]=$(el).text();
 							});
 												
-							$filter.html( retText.join(", ") );
+							$filter.html( retText.join("<br/>") );
 						}	
 						else
 						{
