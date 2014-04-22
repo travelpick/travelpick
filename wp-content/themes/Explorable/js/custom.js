@@ -329,7 +329,7 @@
 						$("li[data-value=" + $(el).attr( 'value' )+"]").addClass("selected");
 					});
 					
-					$( 'a.'+$this_ab_type+' .et_explorable_filter_text' ).text( retText.join(", ") );
+					$( 'a.'+$this_ab_type+' .et_explorable_filter_text' ).html( retText.join("<br/>") );
 				}
 								
 			});
