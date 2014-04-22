@@ -254,9 +254,28 @@ rewind_posts();
 				
 				if ( $items ) {
 					foreach( $items as $item ) {
+						
+						$selectedMulti = "";
+						if ( isset( $_GET['et-'.$etName] ) && 'none' != $_GET['et-'.$etName])
+						{
+							if ($taxOpt[$etName]['required'])
+							{
+								$selectedMulti = selected( intval( $_GET['et-'.$etName] ), $item->term_id, false );
+							}
+							else
+							{
+								foreach($_GET['et-'.$etName] as $vl)
+								{
+									$selectedMulti = selected( intval( $vl ), $item->term_id, false );
+									if ($selectedMulti)
+										break;
+								}								
+							}						
+						}
+						
 						printf( '<option value="%d"%s>%s</option>',
 							esc_attr( $item->term_id ),
-							( isset( $_GET['et-'.$etName] ) && 'none' != $_GET['et-'.$etName] ? selected( intval( $_GET['et-'.$etName] ), $item->term_id, false ) : '' ),
+							$selectedMulti,
 							esc_html( $item->name )
 						);
 					}
@@ -303,12 +322,16 @@ rewind_posts();
 							<?php print_thumbnail( $thumb, $thumbnail["use_timthumb"], $titletext, $width, $height, $classtext ); ?>
 						</div> <!-- .listing-image -->
 						<div class="listing-text">
-							<h3><a href="<?php echo reset($url)?>"><?php the_title(); ?></a></h3>
+							<h3><a class="post-link" href="<?php echo reset($url)?>"><?php the_title(); ?></a></h3>
 										
-							<?php foreach( get_taxonomies( array( 'show_ui' => true, 'object_type'=>array('listing') ), 'objects' ) as $taxonomy ) {
-								$etName = $taxonomy->name;
-								echo '<p>', wp_strip_all_tags( get_the_term_list( get_the_ID(), $etName, esc_html( $taxonomy->label).": ", ", ") ), '</p>';
-							}	
+							<?php 
+								//Пока не стоит
+								/*
+								foreach( get_taxonomies( array( 'show_ui' => true, 'object_type'=>array('listing') ), 'objects' ) as $taxonomy ) {
+									$etName = $taxonomy->name;
+									echo '<p>', wp_strip_all_tags( get_the_term_list( get_the_ID(), $etName, esc_html( $taxonomy->label).": ", ", ") ), '</p>';
+								}*/
+								
 							?>	
 							
 						<?php if ( ( $et_rating = et_get_rating() ) && 0 != $et_rating ) : ?>
@@ -325,18 +348,4 @@ rewind_posts();
 			</div> <!-- .overview -->
 		</div> <!-- .viewport -->
 	</div> <!-- #et-listings -->
-</div> <!-- #et-list-view -->
-
-<script type="text/javascript">
-
-
-		<?php 
-				if (isset($_GET['post_type']) && ($_GET['post_type']=='listing'))
-				{
-					?>
-					jQuery('#et-list-view.et-normal-listings').find('.et-date').click();
-					<?php 
-				}
-		?>
-		
-</script>		
+</div> <!-- #et-list-view -->	

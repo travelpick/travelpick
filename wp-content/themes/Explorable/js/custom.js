@@ -173,6 +173,10 @@
 		$et_listings_item.find('.et-mobile-link').click( function( event ) {
 			event.stopPropagation();
 		} );
+		
+		$et_listings_item.find('.post-link').click( function( event ) {
+			event.stopPropagation();
+		} );		
 
 		$et_listings_item.click( function(){
 			var $this_li = $(this);
@@ -312,13 +316,22 @@
 				var $this_select = $( element );
 				var $this_ab_type = $this_select.attr("data-link-name");
 				$this_select.find('option').each(function(){
-					var $this_option = $( this );
-					et_filter_options_html += '<li data-value="' + $this_option.attr( 'value' ) + '">' + $this_option.text() + '</li>';					
-					$( 'a.'+$this_ab_type ).append( '<ul>' + et_filter_options_html + '</ul>' );			
-					if ( $this_select.find( ':selected' ).length ) {
-						$( 'a.'+$this_ab_type+' .et_explorable_filter_text' ).text( $this_select.find( ':selected' ).text() );
-					}
+					var $this_option = $( this );					
+					et_filter_options_html += '<li data-value="' + $this_option.attr( 'value' ) + '">' + $this_option.text() + '</li>';									
 				});
+				
+				$( 'a.'+$this_ab_type ).append( '<ul>' + et_filter_options_html + '</ul>' );		
+
+				if ( $this_select.find( 'option[selected=selected]' ).length ) {
+					var retText=Array();
+					$this_select.find( 'option[selected=selected]' ).each(function(t,el){
+						retText[t]=$(el).text();
+						$("li[data-value=" + $(el).attr( 'value' )+"]").addClass("selected");
+					});
+					
+					$( 'a.'+$this_ab_type+' .et_explorable_filter_text' ).text( retText.join(", ") );
+				}
+								
 			});
 			/*
 			$et_filter_listing_type = $et_filter_form.find( '#et-listing-type' );
@@ -389,44 +402,53 @@
 					$active_filter_option,
 					filter_order;
 				
-				filter_order = $parent_link.index('.filter-type');
-				$active_filter_option = $et_filter_form.find( 'select' ).eq( filter_order );
-
-				if ($active_filter_option.attr("data-required")=="1")
-				{
-					$parent_link.find( '.et_explorable_filter_text' ).html( $this_element.html() );							
-					$active_filter_option.find( ':selected' ).removeAttr( 'selected' );
-					$this_element.closest("ul").find( '.selected' ).removeClass( 'selected' );
-				}
-				else
-				{
-					$default_text = $this_element.closest("ul").find("li[data-value=none]").html();
-					$filter = $parent_link.find( '.et_explorable_filter_text' );
-					$count = $active_filter_option.find( ':selected' ).length;
-
-					if ($count)
-					{
-						$filter.html( $default_text + ' ('+$count+') ' );
-					}	
-					else
-					{
-						$filter.html( $default_text );
-					}			
-				}	
-				
 				if ($this_element.attr("data-value") != "none")
 				{
-					$selectedOpt = $active_filter_option.find( 'option[value=' + $this_element.attr( 'data-value' ) + ']' );
-					if ($selectedOpt.attr("selected"))
+					filter_order = $parent_link.index('.filter-type');
+					$active_filter_option = $et_filter_form.find( 'select' ).eq( filter_order );
+					
+					if ($active_filter_option.attr("data-required")=="1")
 					{
-						$selectedOpt.removeAttr( 'selected' );
+						$parent_link.find( '.et_explorable_filter_text' ).html( $this_element.html() );							
+						$active_filter_option.find( ':selected' ).removeAttr( 'selected' );
+						$this_element.closest("ul").find( '.selected' ).removeClass( 'selected' );				
+						$this_element.addClass("selected");	
+						$active_filter_option.find( 'option[value=' + $this_element.attr( 'data-value' ) + ']' ).attr("selected", "selected");
 					}
 					else
 					{
-						$selectedOpt.attr("selected", "selected");
-					}
-					$this_element.toggleClass("selected");						
-				}
+						
+						$selectedOpt = $active_filter_option.find( 'option[value=' + $this_element.attr( 'data-value' ) + ']' );
+						if ($selectedOpt.attr("selected"))
+						{
+							$selectedOpt.removeAttr( 'selected' );
+						}
+						else
+						{
+							$selectedOpt.attr("selected", "selected");
+						}
+						$this_element.toggleClass("selected");						
+						
+						$default_text = $this_element.closest("ul").find("li[data-value=none]").html();
+						$filter = $parent_link.find( '.et_explorable_filter_text' );
+						$count = $active_filter_option.find( ':selected' ).length;
+
+						if ($count)
+						{
+							var retText=Array();
+							$active_filter_option.find( 'option[selected=selected]' ).each(function(t,el){
+								retText[t]=$(el).text();
+							});
+												
+							$filter.html( retText.join(", ") );
+						}	
+						else
+						{
+							$filter.html( $default_text );
+						}		
+					
+					}						
+				}				
 				
 				/*$parent_link.removeClass( 'filter-type-open' ).find( 'ul' ).animate( { 'opacity' : 0 }, 500, function() {
 					$(this).css( 'display', 'none' );
