@@ -430,11 +430,21 @@
 					
 					if ($active_filter_option.attr("data-required")=="1")
 					{
-						$parent_link.find( '.et_explorable_filter_text' ).html( $this_element.html() );							
+						$this_element_is_selected = false;
+						$parent_link.find( '.et_explorable_filter_text' ).html( $this_element.html() );	
+						if ($this_element.is(".selected"))
+						{
+							$this_element_is_selected = true;
+						}
 						$active_filter_option.find( ':selected' ).removeAttr( 'selected' );
-						$this_element.closest("ul").find( '.selected' ).removeClass( 'selected' );				
-						$this_element.addClass("selected");	
-						$active_filter_option.find( 'option[value=' + $this_element.attr( 'data-value' ) + ']' ).attr("selected", "selected");
+						$this_element.closest("ul").find( '.selected' ).removeClass( 'selected' );	
+						
+						if (!$this_element_is_selected)
+						{
+							$this_element.addClass("selected");	
+							$active_filter_option.find( 'option[value=' + $this_element.attr( 'data-value' ) + ']' ).attr("selected", "selected");							
+						}
+
 					}
 					else
 					{
