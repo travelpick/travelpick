@@ -375,6 +375,27 @@
 			if ( $et_filter_listing_rating.find( ':selected' ).length ) {
 				$( 'a.listing-rating .et_explorable_filter_text' ).html( $( 'a.listing-rating li[data-value=' + $et_filter_listing_rating.find( ':selected' ).val() + ']' ).html() );
 			}*/
+			
+			$(".filter-reset").click(function(){
+
+				$et_filter_form.find("option[selected=selected]").each(function(){
+					$(this).removeAttr("selected");
+				});
+				$et_filter_form.find(".selected").each(function(){
+					$(this).removeAttr("class");
+				});
+				
+				$et_filter_form.find( '.filter-type' ).each(function(){
+					var $dt = $(this).find("li[data-value=none]").text();
+					$(this).find(".et_explorable_filter_text").text($dt);
+					
+					$(this).removeClass( 'filter-type-open' ).find( 'ul' ).animate( { 'opacity' : 0 }, 500, function() {
+						$(this).css( 'display', 'none' );
+					} );					
+				});
+
+				return false;
+			});
 
 			$( 'a.filter-type' ).click( function() {
 				var $this_element = $(this);

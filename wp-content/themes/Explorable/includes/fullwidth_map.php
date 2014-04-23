@@ -283,6 +283,8 @@ rewind_posts();
 				echo '</select>';
 			}
 			?>	
+			
+			<button id="et-filter" class="filter-reset"><?php esc_html_e( 'Reset', 'Explorable' ); ?></button>
 
 		</form>
 	</div> <!-- .container -->

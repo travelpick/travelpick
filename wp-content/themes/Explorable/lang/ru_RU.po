@@ -45,6 +45,10 @@ msgstr "Рейтинг"
 msgid "Filter"
 msgstr "Фильтр"
 
+#: ../includes/fullwidth_map.php:287
+msgid "Reset"
+msgstr "Сброс"
+
 #: ../comments.php:4
 msgid "This post is password protected. Enter the password to view comments."
 msgstr ""
