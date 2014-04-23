@@ -267,7 +267,7 @@ html, body { height: 100%; margin: 0; padding: 0; }
 
 #et-listing-type, #et-listing-location, #et-listing-rating { display: none; }
 
-.filter-type ul { display: none; position: absolute; width: 99px; z-index: 100; left: -1px; bottom: 46px; background: #eee; padding: 20px 20px 5px; -moz-border-radius: 10px; -webkit-border-radius: 10px; border-radius: 10px; }
+.filter-type ul { display: none; position: absolute; width: 99px; z-index: 100; left: -1px; bottom: 100%; background: #eee; padding: 20px 20px 5px; -moz-border-radius: 10px; -webkit-border-radius: 10px; border-radius: 10px; }
 	.filter-type li { margin-bottom: 15px; }
 	.filter-type li:first-child { color: #888; font-style: italic; }
 
