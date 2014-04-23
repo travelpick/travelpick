@@ -428,11 +428,12 @@
 					filter_order = $parent_link.index('.filter-type');
 					$active_filter_option = $et_filter_form.find( 'select' ).eq( filter_order );
 					$default_text = $this_element.closest("ul").find("li[data-value=none]").html();
+					$filter = $parent_link.find( '.et_explorable_filter_text' );
 					
 					if ($active_filter_option.attr("data-required")=="1")
 					{
 						$this_element_is_selected = false;
-						$parent_link.find( '.et_explorable_filter_text' ).html( $this_element.html() );	
+						$filter.html( $this_element.html() );	
 						if ($this_element.is(".selected"))
 						{
 							$this_element_is_selected = true;
@@ -444,8 +445,11 @@
 						{
 							$this_element.addClass("selected");	
 							$active_filter_option.find( 'option[value=' + $this_element.attr( 'data-value' ) + ']' ).attr("selected", "selected");	
-							$filter.html( $default_text );
 						}
+						else
+						{
+							$filter.html( $default_text );
+						}	
 
 					}
 					else
@@ -462,7 +466,6 @@
 						}
 						$this_element.toggleClass("selected");						
 						
-						$filter = $parent_link.find( '.et_explorable_filter_text' );
 						$count = $active_filter_option.find( ':selected' ).length;
 
 						if ($count)
